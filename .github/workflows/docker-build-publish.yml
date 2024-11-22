@@ -25,9 +25,9 @@ jobs:
       # Étape 3 : Construire l'image Docker
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${{ github.repository }}:latest .
+          docker build -t ghcr.io/${{ github.repository }}/jokesapi:latest .
 
       # Étape 4 : Publier l'image sur GitHub Container Registry
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${{ github.repository }}:latest
+          docker push ghcr.io/${{ github.repository }}/jokesapi:latest
