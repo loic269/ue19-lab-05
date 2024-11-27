@@ -3,31 +3,21 @@ name: Build and Publish JokesAPI Docker Image
 on:
   push:
     branches:
-      - main  # L'action se déclenche sur chaque modification de la branche 'main'
+      - main
 
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      # Étape 1 : Cloner le code source du repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Étape 2 : Connexion à GitHub Container Registry
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}  # Utilise l'acteur GitHub actuel pour le nom d'utilisateur
-          password: ${{ secrets.GITHUB_TOKEN }}  # Utilise le token secret pour l'authentification
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      # Étape 3 : Construire l'image Docker
       - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/${{ github.repository }}/jokesapi:latest .
+        run: docker build -t ghcr.io/${{ github.repository_owner }}/jokesapi:latest .
 
-      # Étape 4 : Publier l'image sur GitHub Container Registry
       - name: Push Docker image
-        run: |
-          docker push ghcr.io/${{ github.repository }}/jokesapi:latest
+        run: docker push ghcr.io/${{ github.repository_owner }}/jokesapi:latest
