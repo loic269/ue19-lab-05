@@ -24,3 +24,15 @@ jobs:
 
       - name: Push Docker image
         run: docker push ghcr.io/loic269/jokesapi:latest
+
+        # Étape ajoutée pour scanner l'image avec Trivy
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@v0.11.0
+        with:
+          image-ref: ghcr.io/loic269/jokesapi:latest
+          format: table # Format lisible dans les logs
+          severity: HIGH,CRITICAL # Focalisation sur les vulnérabilités importantes
+          exit-code: 0 # Empêche l'échec de l'étape si des vulnérabilités sont détectées
+
+      - name: Push Docker image
+        run: docker push ghcr.io/loic269/jokesapi:latest
