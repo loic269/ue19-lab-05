@@ -34,7 +34,9 @@ jobs:
           image-ref: ghcr.io/loic269/jokesapi:latest
           format: table
           severity: HIGH,CRITICAL
-          exit-code: 0
+          exit-code: 1 # Échoue si des vulnérabilités sont détectées
 
+      # Étape conditionnelle pour pousser l'image seulement si le scan passe
       - name: Push Docker image
-        run: docker push ghcr.io/loic269/jokesapi:latest
+        if: success() # Cette étape ne sera exécutée que si le scan réussit
+        run: docker push $IMAGE_NAME:latest
